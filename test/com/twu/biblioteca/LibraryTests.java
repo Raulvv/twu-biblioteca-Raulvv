@@ -14,9 +14,9 @@ public class LibraryTests {
     @Before
     public void initialize() {
         books = new ArrayList(Arrays.asList(
-           new Book("Elon Musk", "Ashlee Vance", "2015"),
-           new Book("Interview with the Vampire", "Anne Rice", "1976"),
-           new Book("Homo Deus: A Brief History of Tomorrow", "Yuval Noah Harari", "2015")
+           new Book(1,"Elon Musk", "Ashlee Vance", "2015"),
+           new Book(2,"Interview with the Vampire", "Anne Rice", "1976"),
+           new Book(3,"Homo Deus: A Brief History of Tomorrow", "Yuval Noah Harari", "2015")
         ));
         library = new Library(books);
     }
@@ -24,5 +24,11 @@ public class LibraryTests {
     @Test
     public void itReturnsTheFullListOfBooks() {
         assertEquals(books.size(), library.getBooks().size());
+    }
+
+    @Test
+    public void itReturnsABookByItId() {
+        Book book = library.getBookById(1);
+        assertEquals(1, book.getId());
     }
 }

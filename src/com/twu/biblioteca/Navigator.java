@@ -12,7 +12,7 @@ public class Navigator {
 
     Navigator(Library library) {
         this.library = library;
-        this.options = Arrays.asList("1 - Show all books");
+        this.options = Arrays.asList("1 - Show all books", "2 - Checkout a book");
     }
 
     String welcome() {
@@ -23,27 +23,48 @@ public class Navigator {
         return this.options;
     }
 
-    List<String> getBooksOnTheLibrary() {
-        return library.getBooks().stream().map(book -> {
-            return book.toString();
-        }).collect(Collectors.toList());
+    List<String> getAvailableBooks() {
+        List<String> availableBooks = new ArrayList<>();
+        for (Book book: library.getBooks()) {
+            if (!book.isCheckout()) {
+                availableBooks.add(book.toString());
+            }
+        }
+        return availableBooks;
     }
 
-    List<String> executeUserOption(String option) {
+    String executeUserOption(String option) {
         try {
             int optionNumber = parseInt(option);
-            if (optionNumber <= this.options.size() && optionNumber > 0) {
-                switch (optionNumber) {
-                    case 1:
-                        return getBooksOnTheLibrary();
-                }
-            } else {
+            if (optionNumber <= this.options.size() && optionNumber > 0) switch (optionNumber) {
+                case 1:
+                    List<String> booksList = getAvailableBooks();
+                    Printer.printList("Title  |  Author  | Publication Year", booksList);
+                    return " ";
+                case 2:
+                    checkoutAvailableBook();
+                    return "Successfully checked!";
+            }
+            else {
                 throw new IndexOutOfBoundsException();
             }
-            return Collections.singletonList("Select a valid option!");
+            return "Select a valid option!";
 
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
-            return Collections.singletonList("Select a valid option!");
+            return "Select a valid option!";
         }
+    }
+
+    public void checkoutAvailableBook() {
+        int bookId = getBookId();
+        Book selectedBook = library.getBookById(bookId);
+        selectedBook.checkout();
+    }
+
+    public int getBookId() {
+        System.out.print("Enter the book id: ");
+        Scanner scanner = new Scanner(System.in);
+        String id = scanner.nextLine();
+        return parseInt(id);
     }
 }

@@ -6,9 +6,9 @@ public class BibliotecaApp {
 
     public static void main(String[] args) {
         ArrayList books = new ArrayList(Arrays.asList(
-                new Book("Elon Musk", "Ashlee Vance", "2015"),
-                new Book("Interview with the Vampire", "Anne Rice", "1976"),
-                new Book("Homo Deus: A Brief History of Tomorrow", "Yuval Noah Harari", "2015")
+                new Book(1,"Elon Musk", "Ashlee Vance", "2015"),
+                new Book(2,"Interview with the Vampire", "Anne Rice", "1976"),
+                new Book(3,"Homo Deus: A Brief History of Tomorrow", "Yuval Noah Harari", "2015")
         ));
         Library library = new Library(books);
         Navigator nav = new Navigator(library);
@@ -17,7 +17,7 @@ public class BibliotecaApp {
         System.out.println(nav.welcome());
         while (option.toLowerCase() != "quit") {
             Printer.printList("What would you like to do?", nav.showMenu());
-            System.out.println("Enter an option: ");
+            System.out.print("Enter an option: ");
             Scanner scanner = new Scanner(System.in);
             option = scanner.nextLine();
 
