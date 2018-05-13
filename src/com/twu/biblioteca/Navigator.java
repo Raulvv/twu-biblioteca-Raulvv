@@ -12,7 +12,7 @@ public class Navigator {
 
     Navigator(Library library) {
         this.library = library;
-        this.options = Arrays.asList("1 - Show all books", "2 - Checkout a book");
+        this.options = Arrays.asList("1 - Show all books", "2 - Checkout a book", "3 - Return a book");
     }
 
     String welcome() {
@@ -36,14 +36,18 @@ public class Navigator {
     String executeUserOption(String option) {
         try {
             int optionNumber = parseInt(option);
+            int bookId = 0;
             if (optionNumber <= this.options.size() && optionNumber > 0) switch (optionNumber) {
                 case 1:
                     List<String> booksList = getAvailableBooks();
-                    Printer.printList("Title  |  Author  | Publication Year", booksList);
+                    Printer.printList("ID  |  Title  |  Author  | Publication Year", booksList);
                     return " ";
                 case 2:
-                    checkoutAvailableBook();
-                    return "Successfully checked!";
+                    bookId = getBookId();
+                    return checkoutAvailableBook(bookId);
+                case 3:
+                    bookId = getBookId();
+                    return returnBook(bookId);
             }
             else {
                 throw new IndexOutOfBoundsException();
@@ -55,10 +59,24 @@ public class Navigator {
         }
     }
 
-    public void checkoutAvailableBook() {
-        int bookId = getBookId();
+    public String checkoutAvailableBook(int bookId) {
         Book selectedBook = library.getBookById(bookId);
-        selectedBook.checkout();
+        if (selectedBook.isCheckout()) {
+            return "That book is not available.";
+        } else {
+            selectedBook.checkout();
+            return "Thank you! Enjoy the book";
+        }
+    }
+
+    public String returnBook(int bookId) {
+        Book selectedBook = library.getBookById(bookId);
+        if (selectedBook.isCheckout()) {
+            selectedBook.checkout();
+            return "Thank you for returning the book.";
+        } else {
+            return "That is not a valid book to return.";
+        }
     }
 
     public int getBookId() {

@@ -8,6 +8,7 @@ import static org.junit.Assert.*;
 
 public class NavigatorTests {
     private Navigator nav;
+    private Library library;
 
     @Before
     public void initialize() {
@@ -16,7 +17,7 @@ public class NavigatorTests {
                 new Book(2,"Interview with the Vampire", "Anne Rice", "1976"),
                 new Book(3,"Homo Deus: A Brief History of Tomorrow", "Yuval Noah Harari", "2015")
         ));
-        Library library = new Library(books);
+        library = new Library(books);
         nav = new Navigator(library);
     }
 
@@ -45,6 +46,29 @@ public class NavigatorTests {
     @Test
     public void itReturnsAListOfBooksWhenUserInputOne() {
         assertEquals(" ", nav.executeUserOption("1"));
+    }
+
+    @Test
+    public void itCheckoutABookSuccesfully() {
+        assertEquals("Thank you! Enjoy the book", nav.checkoutAvailableBook(1));
+        assertTrue(library.getBookById(1).isCheckout());
+    }
+
+    @Test
+    public void itWarnsThatABookIsNotAvailable() {
+        library.getBookById(1).checkout();
+        assertEquals("That book is not available.", nav.checkoutAvailableBook(1));
+    }
+
+    @Test
+    public void itReturnsABookSuccesfully() {
+        library.getBookById(1).checkout();
+        assertEquals("Thank you for returning the book.", nav.returnBook(1));
+    }
+
+    @Test
+    public void itWarnsThatABookIsNotAvailableForReturning() {
+        assertEquals("That is not a valid book to return.", nav.returnBook(1));
     }
 
     @Test

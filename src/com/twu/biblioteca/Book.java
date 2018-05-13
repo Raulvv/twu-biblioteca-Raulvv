@@ -24,7 +24,7 @@ public class Book {
     }
 
     public void checkout() {
-        this.checkoutStatus = true;
+        this.checkoutStatus = !this.checkoutStatus;
     }
 
     public int getId() {

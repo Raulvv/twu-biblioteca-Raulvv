@@ -31,4 +31,9 @@ public class LibraryTests {
         Book book = library.getBookById(1);
         assertEquals(1, book.getId());
     }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void itReturnsIndexOutOfBoundsExceptionWhenAskingForNonExistingBooks() {
+        library.getBookById(5000);
+    }
 }
