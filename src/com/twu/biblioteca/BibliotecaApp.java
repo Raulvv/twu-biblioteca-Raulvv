@@ -1,7 +1,6 @@
 package com.twu.biblioteca;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 public class BibliotecaApp {
 
@@ -13,8 +12,16 @@ public class BibliotecaApp {
         ));
         Library library = new Library(books);
         Navigator nav = new Navigator(library);
+        String option = "";
 
-        Printer.println(nav.welcome());
-        Printer.printList("Title  |  Author  |  Publication Year", nav.getBooksOnTheLibrary());
+        System.out.println(nav.welcome());
+        while (option.toLowerCase() != "quit") {
+            Printer.printList("What would you like to do?", nav.showMenu());
+            System.out.println("Enter an option: ");
+            Scanner scanner = new Scanner(System.in);
+            option = scanner.nextLine();
+
+            System.out.println(nav.executeUserOption(option));
+        }
     }
 }

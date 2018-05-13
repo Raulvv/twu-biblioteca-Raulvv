@@ -36,4 +36,25 @@ public class NavigatorTests {
         assertEquals(3, books.size());
         assertEquals("Elon Musk  |  Ashlee Vance  |  2015", books.get(0).toString());
     }
+
+    @Test
+    public void itReturnsMenuOptions() {
+        assertEquals("1 - Show all books", nav.showMenu().get(0));
+    }
+
+    @Test
+    public void itReturnsAListOfBooksWhenUserInputOne() {
+        List<String> books = Arrays.asList(
+                "Elon Musk  |  Ashlee Vance  |  2015",
+                "Interview with the Vampire  |  Anne Rice  |  1976",
+                "Homo Deus: A Brief History of Tomorrow  |  Yuval Noah Harari  |  2015");
+        assertEquals(books, nav.executeUserOption("1"));
+    }
+
+    @Test
+    public void itReturnsAStringWhenUserOptionIsNotANumber() {
+        assertEquals("Select a valid option!", nav.executeUserOption("aa").get(0));
+        assertEquals("Select a valid option!", nav.executeUserOption("500").get(0));
+        assertEquals("Select a valid option!", nav.executeUserOption("0").get(0));
+    }
 }
