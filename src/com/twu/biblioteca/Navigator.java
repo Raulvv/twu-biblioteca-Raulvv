@@ -10,6 +10,7 @@ public class Navigator {
     private ArrayList<Item> books;
     private ArrayList<Item> movies;
     private List<String> options;
+    private static Scanner scanner = new Scanner(System.in);
 
     Navigator(ArrayList<Item> books, ArrayList<Item> movies) {
         this.books = books;
@@ -31,10 +32,11 @@ public class Navigator {
         while (option.toLowerCase() != "quit") {
             Printer.printList("What would you like to do?", showMenu());
             System.out.print("Enter an option: ");
-            Scanner scanner = new Scanner(System.in);
             option = scanner.nextLine();
 
-            System.out.println(executeUserOption(option));
+            if (option.toLowerCase() != "quit") {
+                System.out.println(executeUserOption(option));
+            }
         }
     }
 
@@ -58,34 +60,38 @@ public class Navigator {
         int optionNumber;
         try {
             optionNumber = parseInt(option);
+            int bookId;
+
+            switch (optionNumber) {
+                case 1:
+                    List<String> booksList = getAvailableBooks();
+                    Printer.printList("ID  |  Title  |  Author  | Publication Year", booksList);
+                    return " ";
+                case 2:
+                    System.out.print("Enter a book id: ");
+                    bookId = getInputFromUser();
+                    return checkoutAvailableBook(bookId);
+                case 3:
+                    System.out.print("Enter a book id: ");
+                    bookId = getInputFromUser();
+                    return returnBook(bookId);
+                case 4:
+                    List<String> moviesList = getAvailableMovies();
+                    Printer.printList("ID  |  Title  |  Director  | Publication Year  |  Rating", moviesList);
+                    return " ";
+                case 5:
+                    System.out.print("Enter a movie id: ");
+                    bookId = getInputFromUser();
+                    return checkoutAvailableMovie(bookId);
+                case 6:
+                    System.out.print("Enter a movie id: ");
+                    bookId = getInputFromUser();
+                    return returnMovie(bookId);
+                default:
+                    return "Select a valid option!";
+            }
         } catch(NumberFormatException e) {
             return "Select a valid option!";
-        }
-        int bookId;
-
-        switch (optionNumber) {
-            case 1:
-                List<String> booksList = getAvailableBooks();
-                Printer.printList("ID  |  Title  |  Author  | Publication Year", booksList);
-                return " ";
-            case 2:
-                bookId = getItemId();
-                return checkoutAvailableBook(bookId);
-            case 3:
-                bookId = getItemId();
-                return returnBook(bookId);
-            case 4:
-                List<String> moviesList = getAvailableMovies();
-                Printer.printList("ID  |  Title  |  Director  | Publication Year  |  Rating", moviesList);
-                return " ";
-            case 5:
-                bookId = getItemId();
-                return checkoutAvailableMovie(bookId);
-            case 6:
-                bookId = getItemId();
-                return returnMovie(bookId);
-            default:
-                return "Select a valid option!";
         }
     }
 
@@ -105,9 +111,7 @@ public class Navigator {
         return CollectionManager.returnItem(movieId, movies, "Thank you for returning the movie.", "That is not a valid movie to return.");
     }
 
-    public int getItemId() {
-        System.out.print("Enter the book id: ");
-        Scanner scanner = new Scanner(System.in);
+    public int getInputFromUser() {
         String id = scanner.nextLine();
         return parseInt(id);
     }
