@@ -83,8 +83,13 @@ public class NavigatorTests {
     }
 
     @Test
-    public void itWarnsThatABookIsNotAvailableForReturning() {
+    public void itWarnsThatABookIsNotAvailableForReturningWhenValidId() {
         assertEquals("That is not a valid book to return.", nav.returnBook(1));
+    }
+
+    @Test
+    public void itWarnsThatABookIsNotAvailableForReturningWhenInvalidId() {
+        assertEquals("That is not a valid book to return.", nav.returnBook(50000));
     }
 
     @Test
@@ -94,8 +99,13 @@ public class NavigatorTests {
     }
 
     @Test
-    public void itWarnsThatAMovieIsNotAvailableForReturning() {
+    public void itWarnsThatAMovieIsNotAvailableForReturningWhenValidId() {
         assertEquals("That is not a valid movie to return.", nav.returnMovie(1));
+    }
+
+    @Test
+    public void itWarnsThatAMovieIsNotAvailableForReturningWhenInvalidId() {
+        assertEquals("That is not a valid movie to return.", nav.returnMovie(50000));
     }
 
     @Test

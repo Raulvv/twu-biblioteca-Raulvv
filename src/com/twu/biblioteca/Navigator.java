@@ -14,7 +14,14 @@ public class Navigator {
     Navigator(ArrayList<Item> books, ArrayList<Item> movies) {
         this.books = books;
         this.movies = movies;
-        this.options = Arrays.asList("1 - Show all books", "2 - Checkout a book", "3 - Return a book", "4 - Show all movies", "5 - Checkout a movie", "6 - Return a movie");
+        this.options = Arrays.asList(
+                "1 - Show all books",
+                "2 - Checkout a book",
+                "3 - Return a book",
+                "4 - Show all movies",
+                "5 - Checkout a movie",
+                "6 - Return a movie"
+        );
     }
 
     String welcome() {
@@ -26,23 +33,11 @@ public class Navigator {
     }
 
     List<String> getAvailableBooks() {
-        List<String> availableBooks = new ArrayList<>();
-        for (Item book: books) {
-            if (!book.isCheckout()) {
-                availableBooks.add(book.toString());
-            }
-        }
-        return availableBooks;
+        return getAvailableItems(books);
     }
 
     List<String> getAvailableMovies() {
-        List<String> availableMovies = new ArrayList<>();
-        for (Item movie: movies) {
-            if (!movie.isCheckout()) {
-                availableMovies.add(movie.toString());
-            }
-        }
-        return availableMovies;
+        return getAvailableItems(movies);
     }
 
     String executeUserOption(String option) {
@@ -78,42 +73,56 @@ public class Navigator {
     }
 
     public String checkoutAvailableBook(int bookId) {
-        Item selectedBook = CollectionManager.getItemById(books, bookId);
-        if (selectedBook.isCheckout()) {
-            return "That book is not available.";
-        } else {
-            selectedBook.checkout();
-            return "Thank you! Enjoy the book";
-        }
+        return checkoutAvailableItem(bookId, books, "Thank you! Enjoy the book", "That book is not available.");
     }
 
     public String checkoutAvailableMovie(int movieId) {
-        Item selectedMovie = CollectionManager.getItemById(movies, movieId);
-        if (selectedMovie.isCheckout()) {
-            return "That movie is not available.";
-        } else {
-            selectedMovie.checkout();
-            return "Thank you! Enjoy the movie";
-        }
+        return checkoutAvailableItem(movieId, movies, "Thank you! Enjoy the movie", "That movie is not available.");
     }
 
     public String returnBook(int bookId) {
-        Item selectedBook = CollectionManager.getItemById(books, bookId);
-        if (selectedBook.isCheckout()) {
-            selectedBook.checkout();
-            return "Thank you for returning the book.";
-        } else {
-            return "That is not a valid book to return.";
-        }
+        return returnItem(bookId, books, "Thank you for returning the book.", "That is not a valid book to return.");
     }
 
     public String returnMovie(int movieId) {
-        Item selectedMovie = CollectionManager.getItemById(movies, movieId);
-        if (selectedMovie.isCheckout()) {
-            selectedMovie.checkout();
-            return "Thank you for returning the movie.";
-        } else {
-            return "That is not a valid movie to return.";
+        return returnItem(movieId, movies, "Thank you for returning the movie.", "That is not a valid movie to return.");
+    }
+
+    private List<String> getAvailableItems(ArrayList<Item> collection) {
+        List<String> availableItems = new ArrayList<>();
+        for (Item item: collection) {
+            if (!item.isCheckout()) {
+                availableItems.add(item.toString());
+            }
+        }
+        return availableItems;
+    }
+
+    private String checkoutAvailableItem(int id, ArrayList<Item> collection, String successMessage, String errorMessage) {
+        try {
+            Item selectedItem = CollectionManager.getItemById(collection, id);
+            if (selectedItem.isCheckout()) {
+                return errorMessage;
+            } else {
+                selectedItem.checkout();
+                return successMessage;
+            }
+        } catch (IndexOutOfBoundsException | NumberFormatException e) {
+            return errorMessage;
+        }
+    }
+
+    private String returnItem(int id, ArrayList<Item> collection, String successMessage, String errorMessage) {
+        try {
+            Item selectedItem = CollectionManager.getItemById(collection, id);
+            if (selectedItem.isCheckout()) {
+                selectedItem.checkout();
+                return successMessage;
+            } else {
+                return errorMessage;
+            }
+        } catch (IndexOutOfBoundsException | NumberFormatException e) {
+            return errorMessage;
         }
     }
 
@@ -122,13 +131,5 @@ public class Navigator {
         Scanner scanner = new Scanner(System.in);
         String id = scanner.nextLine();
         return parseInt(id);
-    }
-
-    public ArrayList<Item> getBooks() {
-        return books;
-    }
-
-    public ArrayList<Item> getMovies() {
-        return movies;
     }
 }
