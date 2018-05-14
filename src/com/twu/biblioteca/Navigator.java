@@ -7,12 +7,14 @@ import static java.lang.Integer.parseInt;
 
 public class Navigator {
     String log = "On";
-    private Library library;
+    private ArrayList<Item> books;
+    private ArrayList<Item> movies;
     private List<String> options;
 
-    Navigator(Library library) {
-        this.library = library;
-        this.options = Arrays.asList("1 - Show all books", "2 - Checkout a book", "3 - Return a book");
+    Navigator(ArrayList<Item> books, ArrayList<Item> movies) {
+        this.books = books;
+        this.movies = movies;
+        this.options = Arrays.asList("1 - Show all books", "2 - Checkout a book", "3 - Return a book", "4 - Show all movies", "5 - Checkout a movie", "6 - Return a movie");
     }
 
     String welcome() {
@@ -25,12 +27,22 @@ public class Navigator {
 
     List<String> getAvailableBooks() {
         List<String> availableBooks = new ArrayList<>();
-        for (Book book: library.getBooks()) {
+        for (Item book: books) {
             if (!book.isCheckout()) {
                 availableBooks.add(book.toString());
             }
         }
         return availableBooks;
+    }
+
+    List<String> getAvailableMovies() {
+        List<String> availableMovies = new ArrayList<>();
+        for (Item movie: movies) {
+            if (!movie.isCheckout()) {
+                availableMovies.add(movie.toString());
+            }
+        }
+        return availableMovies;
     }
 
     String executeUserOption(String option) {
@@ -43,24 +55,30 @@ public class Navigator {
                     Printer.printList("ID  |  Title  |  Author  | Publication Year", booksList);
                     return " ";
                 case 2:
-                    bookId = getBookId();
+                    bookId = getItemId();
                     return checkoutAvailableBook(bookId);
                 case 3:
-                    bookId = getBookId();
+                    bookId = getItemId();
                     return returnBook(bookId);
+                case 4:
+                    List<String> moviesList = getAvailableMovies();
+                    Printer.printList("ID  |  Title  |  Director  | Publication Year  |  Rating", moviesList);
+                    return " ";
+                case 5:
+                    bookId = getItemId();
+                    return checkoutAvailableMovie(bookId);
+                case 6:
+                    bookId = getItemId();
+                    return returnMovie(bookId);
             }
-            else {
-                throw new IndexOutOfBoundsException();
-            }
-            return "Select a valid option!";
-
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
             return "Select a valid option!";
         }
+        return "Select a valid option!";
     }
 
     public String checkoutAvailableBook(int bookId) {
-        Book selectedBook = library.getBookById(bookId);
+        Item selectedBook = CollectionManager.getItemById(books, bookId);
         if (selectedBook.isCheckout()) {
             return "That book is not available.";
         } else {
@@ -69,8 +87,18 @@ public class Navigator {
         }
     }
 
+    public String checkoutAvailableMovie(int movieId) {
+        Item selectedMovie = CollectionManager.getItemById(movies, movieId);
+        if (selectedMovie.isCheckout()) {
+            return "That movie is not available.";
+        } else {
+            selectedMovie.checkout();
+            return "Thank you! Enjoy the movie";
+        }
+    }
+
     public String returnBook(int bookId) {
-        Book selectedBook = library.getBookById(bookId);
+        Item selectedBook = CollectionManager.getItemById(books, bookId);
         if (selectedBook.isCheckout()) {
             selectedBook.checkout();
             return "Thank you for returning the book.";
@@ -79,10 +107,28 @@ public class Navigator {
         }
     }
 
-    public int getBookId() {
+    public String returnMovie(int movieId) {
+        Item selectedMovie = CollectionManager.getItemById(movies, movieId);
+        if (selectedMovie.isCheckout()) {
+            selectedMovie.checkout();
+            return "Thank you for returning the movie.";
+        } else {
+            return "That is not a valid movie to return.";
+        }
+    }
+
+    public int getItemId() {
         System.out.print("Enter the book id: ");
         Scanner scanner = new Scanner(System.in);
         String id = scanner.nextLine();
         return parseInt(id);
+    }
+
+    public ArrayList<Item> getBooks() {
+        return books;
+    }
+
+    public ArrayList<Item> getMovies() {
+        return movies;
     }
 }
