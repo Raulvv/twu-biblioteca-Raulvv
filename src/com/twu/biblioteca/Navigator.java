@@ -24,6 +24,20 @@ public class Navigator {
         );
     }
 
+    public void start() {
+        String option = "";
+
+        System.out.println(welcome());
+        while (option.toLowerCase() != "quit") {
+            Printer.printList("What would you like to do?", showMenu());
+            System.out.print("Enter an option: ");
+            Scanner scanner = new Scanner(System.in);
+            option = scanner.nextLine();
+
+            System.out.println(executeUserOption(option));
+        }
+    }
+
     String welcome() {
         return "Welcome to Biblioteca App";
     }

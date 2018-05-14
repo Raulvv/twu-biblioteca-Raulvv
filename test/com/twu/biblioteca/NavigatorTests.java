@@ -1,7 +1,9 @@
 package com.twu.biblioteca;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.*;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -36,6 +38,17 @@ public class NavigatorTests {
     @Test
     public void itReturnsWelcomeMessage() {
         assertEquals("Welcome to Biblioteca App", nav.welcome());
+    }
+
+    @Test
+    public void itReturnsAWarningWhenUserOptionIsNotAValidOption() {
+        assertEquals("Select a valid option!", nav.executeUserOption("aa"));
+    }
+
+    @Test
+    public void itReturnsAWarningWhenUserOptionIsOutOfRange() {
+        assertEquals("Select a valid option!", nav.executeUserOption("500"));
+        assertEquals("Select a valid option!", nav.executeUserOption("0"));
     }
 
     @Test
@@ -106,12 +119,5 @@ public class NavigatorTests {
     @Test
     public void itWarnsThatAMovieIsNotAvailableForReturningWhenInvalidId() {
         assertEquals("That is not a valid movie to return.", nav.returnMovie(50000));
-    }
-
-    @Test
-    public void itReturnsAStringWhenUserOptionIsNotANumber() {
-        assertEquals("Select a valid option!", nav.executeUserOption("aa"));
-        assertEquals("Select a valid option!", nav.executeUserOption("500"));
-        assertEquals("Select a valid option!", nav.executeUserOption("0"));
     }
 }

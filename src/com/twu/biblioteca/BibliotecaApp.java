@@ -17,16 +17,6 @@ public class BibliotecaApp {
                 new Movie(3,"The Secret Life of Walter Mitty", "Ben Stiller", "2013", 7.8)
         ));
         Navigator nav = new Navigator(books, movies);
-        String option = "";
-
-        System.out.println(nav.welcome());
-        while (option.toLowerCase() != "quit") {
-            Printer.printList("What would you like to do?", nav.showMenu());
-            System.out.print("Enter an option: ");
-            Scanner scanner = new Scanner(System.in);
-            option = scanner.nextLine();
-
-            System.out.println(nav.executeUserOption(option));
-        }
+        nav.start();
     }
 }
