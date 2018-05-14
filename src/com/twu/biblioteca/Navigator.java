@@ -47,97 +47,62 @@ public class Navigator {
     }
 
     List<String> getAvailableBooks() {
-        return getAvailableItems(books);
+        return CollectionManager.getAvailableItems(books);
     }
 
     List<String> getAvailableMovies() {
-        return getAvailableItems(movies);
+        return CollectionManager.getAvailableItems(movies);
     }
 
     String executeUserOption(String option) {
+        int optionNumber;
         try {
-            int optionNumber = parseInt(option);
-            int bookId = 0;
-            if (optionNumber <= this.options.size() && optionNumber > 0) switch (optionNumber) {
-                case 1:
-                    List<String> booksList = getAvailableBooks();
-                    Printer.printList("ID  |  Title  |  Author  | Publication Year", booksList);
-                    return " ";
-                case 2:
-                    bookId = getItemId();
-                    return checkoutAvailableBook(bookId);
-                case 3:
-                    bookId = getItemId();
-                    return returnBook(bookId);
-                case 4:
-                    List<String> moviesList = getAvailableMovies();
-                    Printer.printList("ID  |  Title  |  Director  | Publication Year  |  Rating", moviesList);
-                    return " ";
-                case 5:
-                    bookId = getItemId();
-                    return checkoutAvailableMovie(bookId);
-                case 6:
-                    bookId = getItemId();
-                    return returnMovie(bookId);
-            }
-        } catch (NumberFormatException | IndexOutOfBoundsException e) {
+            optionNumber = parseInt(option);
+        } catch(NumberFormatException e) {
             return "Select a valid option!";
         }
-        return "Select a valid option!";
+        int bookId;
+
+        switch (optionNumber) {
+            case 1:
+                List<String> booksList = getAvailableBooks();
+                Printer.printList("ID  |  Title  |  Author  | Publication Year", booksList);
+                return " ";
+            case 2:
+                bookId = getItemId();
+                return checkoutAvailableBook(bookId);
+            case 3:
+                bookId = getItemId();
+                return returnBook(bookId);
+            case 4:
+                List<String> moviesList = getAvailableMovies();
+                Printer.printList("ID  |  Title  |  Director  | Publication Year  |  Rating", moviesList);
+                return " ";
+            case 5:
+                bookId = getItemId();
+                return checkoutAvailableMovie(bookId);
+            case 6:
+                bookId = getItemId();
+                return returnMovie(bookId);
+            default:
+                return "Select a valid option!";
+        }
     }
 
     public String checkoutAvailableBook(int bookId) {
-        return checkoutAvailableItem(bookId, books, "Thank you! Enjoy the book", "That book is not available.");
+        return CollectionManager.checkoutAvailableItem(bookId, books, "Thank you! Enjoy the book", "That book is not available.");
     }
 
     public String checkoutAvailableMovie(int movieId) {
-        return checkoutAvailableItem(movieId, movies, "Thank you! Enjoy the movie", "That movie is not available.");
+        return CollectionManager.checkoutAvailableItem(movieId, movies, "Thank you! Enjoy the movie", "That movie is not available.");
     }
 
     public String returnBook(int bookId) {
-        return returnItem(bookId, books, "Thank you for returning the book.", "That is not a valid book to return.");
+        return CollectionManager.returnItem(bookId, books, "Thank you for returning the book.", "That is not a valid book to return.");
     }
 
     public String returnMovie(int movieId) {
-        return returnItem(movieId, movies, "Thank you for returning the movie.", "That is not a valid movie to return.");
-    }
-
-    private List<String> getAvailableItems(ArrayList<Item> collection) {
-        List<String> availableItems = new ArrayList<>();
-        for (Item item: collection) {
-            if (!item.isCheckout()) {
-                availableItems.add(item.toString());
-            }
-        }
-        return availableItems;
-    }
-
-    private String checkoutAvailableItem(int id, ArrayList<Item> collection, String successMessage, String errorMessage) {
-        try {
-            Item selectedItem = CollectionManager.getItemById(collection, id);
-            if (selectedItem.isCheckout()) {
-                return errorMessage;
-            } else {
-                selectedItem.checkout();
-                return successMessage;
-            }
-        } catch (IndexOutOfBoundsException | NumberFormatException e) {
-            return errorMessage;
-        }
-    }
-
-    private String returnItem(int id, ArrayList<Item> collection, String successMessage, String errorMessage) {
-        try {
-            Item selectedItem = CollectionManager.getItemById(collection, id);
-            if (selectedItem.isCheckout()) {
-                selectedItem.checkout();
-                return successMessage;
-            } else {
-                return errorMessage;
-            }
-        } catch (IndexOutOfBoundsException | NumberFormatException e) {
-            return errorMessage;
-        }
+        return CollectionManager.returnItem(movieId, movies, "Thank you for returning the movie.", "That is not a valid movie to return.");
     }
 
     public int getItemId() {
