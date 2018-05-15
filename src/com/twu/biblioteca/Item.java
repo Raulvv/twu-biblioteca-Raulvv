@@ -2,19 +2,23 @@ package com.twu.biblioteca;
 
 public abstract class Item {
     protected int id;
-    protected Boolean checkoutStatus;
+    protected Boolean borrowed;
 
     Item(int id) {
         this.id = id;
-        this.checkoutStatus = false;
+        this.borrowed = false;
     }
 
     public Boolean isCheckout() {
-        return this.checkoutStatus;
+        return this.borrowed;
     }
 
     public void checkout() {
-        this.checkoutStatus = !this.checkoutStatus;
+        this.borrowed = true;
+    }
+
+    public void checkin() {
+        this.borrowed = false;
     }
 
     public int getId() {

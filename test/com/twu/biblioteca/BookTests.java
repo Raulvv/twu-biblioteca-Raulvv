@@ -32,7 +32,7 @@ public class BookTests {
         assertFalse(book.isCheckout());
         book.checkout();
         assertTrue(book.isCheckout());
-        book.checkout();
+        book.checkin();
         assertFalse(book.isCheckout());
     }
 

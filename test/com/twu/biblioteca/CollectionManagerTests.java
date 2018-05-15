@@ -53,30 +53,33 @@ public class CollectionManagerTests {
     }
 
     @Test
-    public void itCheckoutAItemSuccessfully() {
+    public void itCheckoutAnItemSuccessfully() {
         assertEquals("Success message", CollectionManager.checkoutAvailableItem(1, itemsMock, "Success message", "Error message"));
-        assertTrue(CollectionManager.getItemById(itemsMock,1).isCheckout());
     }
 
     @Test
-    public void itWarnsThatAItemIsNotAvailable() {
-        CollectionManager.getItemById(itemsMock,1).checkout();
+    public void itWarnsThatAnItemIsNotAvailable() {
+        Item item = itemsMock.get(0);
+        assertEquals(1, item.getId());
+        item.checkout();
         assertEquals("Error message", CollectionManager.checkoutAvailableItem(1, itemsMock, "Success message", "Error message"));
     }
 
     @Test
-    public void itReturnsAItemSuccessfully() {
-        CollectionManager.getItemById(itemsMock,1).checkout();
+    public void itReturnsAnItemSuccessfully() {
+        Item item = itemsMock.get(0);
+        assertEquals(1, item.getId());
+        item.checkout();
         assertEquals("Success message", CollectionManager.returnItem(1, itemsMock, "Success message", "Error message"));
     }
 
     @Test
-    public void itWarnsThatAItemIsNotAvailableForReturningWhenValidId() {
+    public void itWarnsThatAnItemIsNotAvailableForReturningWhenValidId() {
         assertEquals("Error message", CollectionManager.returnItem(1, itemsMock, "Success message", "Error message"));
     }
 
     @Test
-    public void itWarnsThatAItemIsNotAvailableForReturningWhenInvalidId() {
+    public void itWarnsThatAnItemIsNotAvailableForReturningWhenInvalidId() {
         assertEquals("Error message", CollectionManager.returnItem(5000, itemsMock, "Success message", "Error message"));
     }
 }

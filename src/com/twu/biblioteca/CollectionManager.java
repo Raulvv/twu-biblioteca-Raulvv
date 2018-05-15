@@ -47,7 +47,7 @@ public class CollectionManager {
         try {
             Item selectedItem = CollectionManager.getItemById(collection, id);
             if (selectedItem.isCheckout()) {
-                selectedItem.checkout();
+                selectedItem.checkin();
                 return successMessage;
             } else {
                 return errorMessage;

@@ -15,6 +15,15 @@ public class NavigatorTests {
 
     @Before
     public void initialize() {
+        List<String> options = Arrays.asList(
+                "1 - Show all books",
+                "2 - Checkout a book",
+                "3 - Return a book",
+                "4 - Show all movies",
+                "5 - Checkout a movie",
+                "6 - Return a movie"
+        );
+
         books = new ArrayList(Arrays.asList(
                 new Book(1,"Elon Musk", "Ashlee Vance", "2015"),
                 new Book(2,"Interview with the Vampire", "Anne Rice", "1976"),
@@ -27,7 +36,7 @@ public class NavigatorTests {
                 new Movie(3,"The Secret Life of Walter Mitty", "Ben Stiller", "2013", 7.8)
         ));
 
-        nav = new Navigator(books, movies);
+        nav = new Navigator(options, books, movies);
     }
 
     @Test
@@ -60,64 +69,92 @@ public class NavigatorTests {
 
     @Test
     public void itReturnsAListOfMoviesAvailable() {
-        List<String> books = nav.getAvailableMovies();
+        List<String> movies = nav.getAvailableMovies();
         assertEquals(3, movies.size());
-        assertEquals("1  |  Avengers  |  Joss Whedon  |  2012  |  8.1", books.get(0));
+        assertEquals("1  |  Avengers  |  Joss Whedon  |  2012  |  8.1", movies.get(0));
     }
 
     @Test
     public void itCheckoutABookSuccessfully() {
-        assertEquals("Thank you! Enjoy the book", nav.checkoutAvailableBook(1));
-        assertTrue(CollectionManager.getItemById(books,1).isCheckout());
+        testInputString("1");
+        assertEquals("Thank you! Enjoy the book", nav.checkoutAvailableBook());
+        Item book = books.get(0);
+        assertTrue(book.getId() == 1);
+        assertTrue(book.isCheckout());
     }
 
     @Test
     public void itCheckoutAMovieSuccessfully() {
-        assertEquals("Thank you! Enjoy the movie", nav.checkoutAvailableMovie(1));
-        assertTrue(CollectionManager.getItemById(movies,1).isCheckout());
+        testInputString("1");
+        assertEquals("Thank you! Enjoy the movie", nav.checkoutAvailableMovie());
+        Item movie = movies.get(0);
+        assertTrue(movie.getId() == 1);
+        assertTrue(movie.isCheckout());
     }
 
     @Test
     public void itWarnsThatABookIsNotAvailable() {
-        CollectionManager.getItemById(books,1).checkout();
-        assertEquals("That book is not available.", nav.checkoutAvailableBook(1));
+        Item book = books.get(0);
+        assertTrue(book.getId() == 1);
+        book.checkout();
+        testInputString("1323");
+        assertEquals("That book is not available.", nav.checkoutAvailableBook());
     }
 
     @Test
     public void itWarnsThatAMovieIsNotAvailable() {
-        CollectionManager.getItemById(movies,1).checkout();
-        assertEquals("That movie is not available.", nav.checkoutAvailableMovie(1));
+        Item movie = movies.get(0);
+        assertTrue(movie.getId() == 1);
+        movie.checkout();
+        testInputString("123123");
+        assertEquals("That movie is not available.", nav.checkoutAvailableMovie());
     }
 
     @Test
     public void itReturnsABookSuccessfully() {
-        CollectionManager.getItemById(books,1).checkout();
-        assertEquals("Thank you for returning the book.", nav.returnBook(1));
+        Item book = books.get(0);
+        assertTrue(book.getId() == 1);
+        book.checkout();
+        testInputString("1");
+        assertEquals("Thank you for returning the book.", nav.returnBook());
     }
 
     @Test
     public void itWarnsThatABookIsNotAvailableForReturningWhenValidId() {
-        assertEquals("That is not a valid book to return.", nav.returnBook(1));
+        testInputString("1545");
+        assertEquals("That is not a valid book to return.", nav.returnBook());
     }
 
     @Test
     public void itWarnsThatABookIsNotAvailableForReturningWhenInvalidId() {
-        assertEquals("That is not a valid book to return.", nav.returnBook(50000));
+        testInputString("gfsdgs");
+        assertEquals("That is not a valid book to return.", nav.returnBook());
     }
 
     @Test
     public void itReturnsAMovieSuccessfully() {
-        CollectionManager.getItemById(movies,1).checkout();
-        assertEquals("Thank you for returning the movie.", nav.returnMovie(1));
+        Item movie = movies.get(0);
+        assertTrue(movie.getId() == 1);
+        movie.checkout();
+        testInputString("1");
+        assertEquals("Thank you for returning the movie.", nav.returnMovie());
     }
 
     @Test
     public void itWarnsThatAMovieIsNotAvailableForReturningWhenValidId() {
-        assertEquals("That is not a valid movie to return.", nav.returnMovie(1));
+        testInputString("500");
+        assertEquals("That is not a valid movie to return.", nav.returnMovie());
     }
 
     @Test
     public void itWarnsThatAMovieIsNotAvailableForReturningWhenInvalidId() {
-        assertEquals("That is not a valid movie to return.", nav.returnMovie(50000));
+        testInputString("dfdsas");
+        assertEquals("That is not a valid movie to return.", nav.returnMovie());
+    }
+
+    private void testInputString(String s) {
+        String input = s;
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
     }
 }

@@ -32,7 +32,7 @@ public class MovieTests {
         assertFalse(movie.isCheckout());
         movie.checkout();
         assertTrue(movie.isCheckout());
-        movie.checkout();
+        movie.checkin();
         assertFalse(movie.isCheckout());
     }
 }

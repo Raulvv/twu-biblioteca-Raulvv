@@ -10,19 +10,11 @@ public class Navigator {
     private ArrayList<Item> books;
     private ArrayList<Item> movies;
     private List<String> options;
-    private static Scanner scanner = new Scanner(System.in);
 
-    Navigator(ArrayList<Item> books, ArrayList<Item> movies) {
+    Navigator(List<String> options, ArrayList<Item> books, ArrayList<Item> movies) {
         this.books = books;
         this.movies = movies;
-        this.options = Arrays.asList(
-                "1 - Show all books",
-                "2 - Checkout a book",
-                "3 - Return a book",
-                "4 - Show all movies",
-                "5 - Checkout a movie",
-                "6 - Return a movie"
-        );
+        this.options = options;
     }
 
     public void start() {
@@ -32,7 +24,7 @@ public class Navigator {
         while (option.toLowerCase() != "quit") {
             Printer.printList("What would you like to do?", showMenu());
             System.out.print("Enter an option: ");
-            option = scanner.nextLine();
+            option = InputReader.getInputString();
 
             if (option.toLowerCase() != "quit") {
                 System.out.println(executeUserOption(option));
@@ -68,25 +60,17 @@ public class Navigator {
                     Printer.printList("ID  |  Title  |  Author  | Publication Year", booksList);
                     return " ";
                 case 2:
-                    System.out.print("Enter a book id: ");
-                    bookId = getInputFromUser();
-                    return checkoutAvailableBook(bookId);
+                    return checkoutAvailableBook();
                 case 3:
-                    System.out.print("Enter a book id: ");
-                    bookId = getInputFromUser();
-                    return returnBook(bookId);
+                    return returnBook();
                 case 4:
                     List<String> moviesList = getAvailableMovies();
                     Printer.printList("ID  |  Title  |  Director  | Publication Year  |  Rating", moviesList);
                     return " ";
                 case 5:
-                    System.out.print("Enter a movie id: ");
-                    bookId = getInputFromUser();
-                    return checkoutAvailableMovie(bookId);
+                    return checkoutAvailableMovie();
                 case 6:
-                    System.out.print("Enter a movie id: ");
-                    bookId = getInputFromUser();
-                    return returnMovie(bookId);
+                    return returnMovie();
                 default:
                     return "Select a valid option!";
             }
@@ -95,24 +79,27 @@ public class Navigator {
         }
     }
 
-    public String checkoutAvailableBook(int bookId) {
+    public String checkoutAvailableBook() {
+        System.out.print("Enter a book id: ");
+        int bookId = InputReader.getInputInteger();
         return CollectionManager.checkoutAvailableItem(bookId, books, "Thank you! Enjoy the book", "That book is not available.");
     }
 
-    public String checkoutAvailableMovie(int movieId) {
+    public String checkoutAvailableMovie() {
+        System.out.print("Enter a movie id: ");
+        int movieId = InputReader.getInputInteger();
         return CollectionManager.checkoutAvailableItem(movieId, movies, "Thank you! Enjoy the movie", "That movie is not available.");
     }
 
-    public String returnBook(int bookId) {
+    public String returnBook() {
+        System.out.print("Enter a book id: ");
+        int bookId = InputReader.getInputInteger();
         return CollectionManager.returnItem(bookId, books, "Thank you for returning the book.", "That is not a valid book to return.");
     }
 
-    public String returnMovie(int movieId) {
+    public String returnMovie() {
+        System.out.print("Enter a movie id: ");
+        int movieId = InputReader.getInputInteger();
         return CollectionManager.returnItem(movieId, movies, "Thank you for returning the movie.", "That is not a valid movie to return.");
-    }
-
-    public int getInputFromUser() {
-        String id = scanner.nextLine();
-        return parseInt(id);
     }
 }
