@@ -57,14 +57,20 @@ public class NavigatorTests {
     }
 
     @Test
+    public void itReturnsAUserInformationWhenInputIsProfile() {
+        nav.setCurrentUser(new User("AA-101","admin", "123", "a@a.com", "example", "123456789",false));
+        assertEquals("AA-101  |  admin  |  a@a.com  |  example  |  123456789", nav.executeUserOption("profile"));
+    }
+
+    @Test
     public void itReturnsAWarningWhenUserIsNotLibrarianAndTriesToAccessUnavailableBooks() {
-        nav.setCurrentUser(new User("AA-101","admin", "123", false));
+        nav.setCurrentUser(new User("AA-101","admin", "123", "a@a.com", "example", "123456789",false));
         assertEquals("Select a valid option!", nav.executeUserOption("7"));
     }
 
     @Test
     public void itReturnsAWarningWhenUserIsNotLibrarianAndTriesToAccessUnavailableMovies() {
-        nav.setCurrentUser(new User("AA-101","admin", "123", false));
+        nav.setCurrentUser(new User("AA-101","admin", "123", "a@a.com", "example", "123456789",false));
         assertEquals("Select a valid option!", nav.executeUserOption("8"));
     }
 

@@ -12,9 +12,9 @@ public class Navigator {
     private List<String> options;
     private User currentUser;
     private ArrayList<User> users = new ArrayList(Arrays.asList(
-            new User("AA-101","admin", "123", true),
-            new User("AA-102","user1", "qwerty", false),
-            new User("AA-103","guess", "12345", false)
+            new User("AA-101","admin", "123", "a@a.com", "example", "123456789",true),
+            new User("AA-102","user1", "qwerty", "b@b.com", "whatever", "987654321",false),
+            new User("AA-103","guess", "12345", "c@c.com", "mandatory", "873874223",false)
     ));
 
     Navigator(List<String> options, ArrayList<Item> books, ArrayList<Item> movies) {
@@ -91,6 +91,9 @@ public class Navigator {
     String executeUserOption(String option) {
         int optionNumber;
         try {
+            if (option.toLowerCase().equals("profile")) {
+                return this.currentUser.toString();
+            }
             optionNumber = parseInt(option);
             int bookId;
 

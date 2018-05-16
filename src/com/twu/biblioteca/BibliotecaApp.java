@@ -6,6 +6,7 @@ public class BibliotecaApp {
 
     public static void main(String[] args) {
         List<String> options = new ArrayList<>(Arrays.asList(
+                "Profile - Show your personal info",
                 "1 - Show all books",
                 "2 - Checkout a book",
                 "3 - Return a book",
