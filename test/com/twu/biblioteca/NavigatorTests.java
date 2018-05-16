@@ -7,6 +7,7 @@ import java.io.*;
 import java.util.*;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class NavigatorTests {
     private Navigator nav;
@@ -40,11 +41,6 @@ public class NavigatorTests {
     }
 
     @Test
-    public void itStartAppSuccessfully() {
-        assertEquals("On", nav.log);
-    }
-
-    @Test
     public void itReturnsWelcomeMessage() {
         assertEquals("Welcome to Biblioteca App", nav.welcome());
     }
@@ -58,6 +54,18 @@ public class NavigatorTests {
     public void itReturnsAWarningWhenUserOptionIsOutOfRange() {
         assertEquals("Select a valid option!", nav.executeUserOption("500"));
         assertEquals("Select a valid option!", nav.executeUserOption("0"));
+    }
+
+    @Test
+    public void itReturnsAWarningWhenUserIsNotLibrarianAndTriesToAccessUnavailableBooks() {
+        nav.setCurrentUser(new User("AA-101","admin", "123", false));
+        assertEquals("Select a valid option!", nav.executeUserOption("7"));
+    }
+
+    @Test
+    public void itReturnsAWarningWhenUserIsNotLibrarianAndTriesToAccessUnavailableMovies() {
+        nav.setCurrentUser(new User("AA-101","admin", "123", false));
+        assertEquals("Select a valid option!", nav.executeUserOption("8"));
     }
 
     @Test
@@ -79,7 +87,7 @@ public class NavigatorTests {
         testInputString("1");
         assertEquals("Thank you! Enjoy the book", nav.checkoutAvailableBook());
         Item book = books.get(0);
-        assertTrue(book.getId() == 1);
+        assertEquals(1, book.getId());
         assertTrue(book.isCheckout());
     }
 
@@ -88,15 +96,15 @@ public class NavigatorTests {
         testInputString("1");
         assertEquals("Thank you! Enjoy the movie", nav.checkoutAvailableMovie());
         Item movie = movies.get(0);
-        assertTrue(movie.getId() == 1);
+        assertEquals(1, movie.getId());
         assertTrue(movie.isCheckout());
     }
 
     @Test
     public void itWarnsThatABookIsNotAvailable() {
         Item book = books.get(0);
-        assertTrue(book.getId() == 1);
-        book.checkout();
+        assertEquals(1, book.getId());
+        book.checkout("AA-101");
         testInputString("1323");
         assertEquals("That book is not available.", nav.checkoutAvailableBook());
     }
@@ -104,8 +112,8 @@ public class NavigatorTests {
     @Test
     public void itWarnsThatAMovieIsNotAvailable() {
         Item movie = movies.get(0);
-        assertTrue(movie.getId() == 1);
-        movie.checkout();
+        assertEquals(1, movie.getId());
+        movie.checkout("AA-101");
         testInputString("123123");
         assertEquals("That movie is not available.", nav.checkoutAvailableMovie());
     }
@@ -113,8 +121,8 @@ public class NavigatorTests {
     @Test
     public void itReturnsABookSuccessfully() {
         Item book = books.get(0);
-        assertTrue(book.getId() == 1);
-        book.checkout();
+        assertEquals(1, book.getId());
+        book.checkout("AA-101");
         testInputString("1");
         assertEquals("Thank you for returning the book.", nav.returnBook());
     }
@@ -127,15 +135,15 @@ public class NavigatorTests {
 
     @Test
     public void itWarnsThatABookIsNotAvailableForReturningWhenInvalidId() {
-        testInputString("gfsdgs");
+        testInputString("NotValid");
         assertEquals("That is not a valid book to return.", nav.returnBook());
     }
 
     @Test
     public void itReturnsAMovieSuccessfully() {
         Item movie = movies.get(0);
-        assertTrue(movie.getId() == 1);
-        movie.checkout();
+        assertEquals(1, movie.getId());
+        movie.checkout("AA-101");
         testInputString("1");
         assertEquals("Thank you for returning the movie.", nav.returnMovie());
     }
@@ -148,7 +156,7 @@ public class NavigatorTests {
 
     @Test
     public void itWarnsThatAMovieIsNotAvailableForReturningWhenInvalidId() {
-        testInputString("dfdsas");
+        testInputString("NotValid");
         assertEquals("That is not a valid movie to return.", nav.returnMovie());
     }
 

@@ -27,14 +27,15 @@ public class CollectionManagerTests {
     }
 
     @Test
-    public void itReturnsAItemByItId() {
+    public void itReturnsAnItemByItIdIfExists() {
         Item movie = CollectionManager.getItemById(itemsMock, 1);
         assertEquals(1, movie.getId());
     }
 
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void itReturnsIndexOutOfBoundsExceptionWhenAskingForNonExistingItems() {
-        CollectionManager.getItemById(itemsMock, 5000);
+    @Test
+    public void itReturnsNullIfItemDoesNotExist() {
+        Item movie = CollectionManager.getItemById(itemsMock, 500);
+        assertEquals(null, movie);
     }
 
     @Test
@@ -45,31 +46,32 @@ public class CollectionManagerTests {
     }
 
     @Test
-    public void itWillNotReturnAnItemWhenIsCheckout() {
-        itemsMock.get(3).checkout();
-        List<String> items = CollectionManager.getAvailableItems(itemsMock);
-        assertEquals(5, items.size());
-        assertEquals("1  |  Elon Musk  |  Ashlee Vance  |  2015", items.get(0));
+    public void itReturnsAListOfItemsUnavailable() {
+        itemsMock.get(0).checkout("AA-101");
+        itemsMock.get(1).checkout("AA-101");
+        List<String> items = CollectionManager.getUnavailableItems(itemsMock);
+        assertEquals(2, items.size());
+        assertEquals("1  |  Elon Musk  |  AA-101", items.get(0));
     }
 
     @Test
     public void itCheckoutAnItemSuccessfully() {
-        assertEquals("Success message", CollectionManager.checkoutAvailableItem(1, itemsMock, "Success message", "Error message"));
+        assertEquals("Success message", CollectionManager.checkoutAvailableItem(1, itemsMock, "AA-101","Success message", "Error message"));
     }
 
     @Test
     public void itWarnsThatAnItemIsNotAvailable() {
         Item item = itemsMock.get(0);
         assertEquals(1, item.getId());
-        item.checkout();
-        assertEquals("Error message", CollectionManager.checkoutAvailableItem(1, itemsMock, "Success message", "Error message"));
+        item.checkout("AA-101");
+        assertEquals("Error message", CollectionManager.checkoutAvailableItem(1, itemsMock, "AA-101","Success message", "Error message"));
     }
 
     @Test
     public void itReturnsAnItemSuccessfully() {
         Item item = itemsMock.get(0);
         assertEquals(1, item.getId());
-        item.checkout();
+        item.checkout("AA-101");
         assertEquals("Success message", CollectionManager.returnItem(1, itemsMock, "Success message", "Error message"));
     }
 

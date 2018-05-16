@@ -17,4 +17,8 @@ public class Movie extends Item {
     public String toString() {
         return this.id + "  |  " + this.title + "  |  " + this.director + "  |  " + this.publicationYear + "  |  " + this.rating;
     }
+
+    public String statusToString() {
+        return this.id + "  |  " + this.title + "  |  " + this.temporalOwner;
+    }
 }

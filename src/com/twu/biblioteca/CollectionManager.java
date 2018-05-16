@@ -9,14 +9,17 @@ public class CollectionManager {
         Boolean found = false;
         int index = 0;
 
-        while (!found) {
+        while (index < collection.size() && !found) {
             if (collection.get(index).getId() == id) {
                 found = true;
             } else {
                 index++;
             }
         }
-        return collection.get(index);
+        if (found)
+            return collection.get(index);
+        else
+            return null;
     }
 
     public static List<String> getAvailableItems(ArrayList<Item> collection) {
@@ -29,13 +32,24 @@ public class CollectionManager {
         return availableItems;
     }
 
-    public static String checkoutAvailableItem(int id, ArrayList<Item> collection, String successMessage, String errorMessage) {
+    public static List<String> getUnavailableItems(ArrayList<Item> collection) {
+        List<String> unavailableItems = new ArrayList<>();
+        for (Item item: collection) {
+            if (item.isCheckout()) {
+                unavailableItems.add(item.statusToString());
+            }
+        }
+        return unavailableItems;
+    }
+
+    public static String checkoutAvailableItem(int id, ArrayList<Item> collection, String code, String successMessage, String errorMessage) {
         try {
             Item selectedItem = CollectionManager.getItemById(collection, id);
+            if (selectedItem == null) { return errorMessage; }
             if (selectedItem.isCheckout()) {
                 return errorMessage;
             } else {
-                selectedItem.checkout();
+                selectedItem.checkout(code);
                 return successMessage;
             }
         } catch (IndexOutOfBoundsException | NumberFormatException e) {
@@ -46,6 +60,7 @@ public class CollectionManager {
     public static String returnItem(int id, ArrayList<Item> collection, String successMessage, String errorMessage) {
         try {
             Item selectedItem = CollectionManager.getItemById(collection, id);
+            if (selectedItem == null) { return errorMessage; }
             if (selectedItem.isCheckout()) {
                 selectedItem.checkin();
                 return successMessage;

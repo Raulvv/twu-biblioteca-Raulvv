@@ -23,14 +23,15 @@ public class MovieTests {
     @Test
     public void itCheckoutsAMovie() {
         assertFalse(movie.isCheckout());
-        movie.checkout();
+        movie.checkout("AA-101");
         assertTrue(movie.isCheckout());
+        assertEquals("AA-101", movie.getTemporalOwner());
     }
 
     @Test
     public void itReturnsAMovie() {
         assertFalse(movie.isCheckout());
-        movie.checkout();
+        movie.checkout("AA-101");
         assertTrue(movie.isCheckout());
         movie.checkin();
         assertFalse(movie.isCheckout());

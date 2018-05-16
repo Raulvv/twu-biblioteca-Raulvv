@@ -23,14 +23,15 @@ public class BookTests {
     @Test
     public void itCheckoutsABook() {
         assertFalse(book.isCheckout());
-        book.checkout();
+        book.checkout("AA-101");
         assertTrue(book.isCheckout());
+        assertEquals("AA-101", book.getTemporalOwner());
     }
 
     @Test
     public void itReturnsABook() {
         assertFalse(book.isCheckout());
-        book.checkout();
+        book.checkout("AA-101");
         assertTrue(book.isCheckout());
         book.checkin();
         assertFalse(book.isCheckout());

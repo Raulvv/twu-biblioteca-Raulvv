@@ -5,8 +5,6 @@ public class Book extends Item {
     private String author;
     private String publicationYear;
 
-    private Boolean checkoutStatus;
-
     Book(int id, String title, String author, String publicationYear) {
         super(id);
         this.title = title;
@@ -16,5 +14,9 @@ public class Book extends Item {
 
     public String toString() {
         return this.id + "  |  " + this.title + "  |  " + this.author + "  |  " + this.publicationYear;
+    }
+
+    public String statusToString() {
+        return this.id + "  |  " + this.title + "  |  " + this.temporalOwner;
     }
 }
